@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
-from utils.public import data_MEMEIdir_file
+from utils.public import data_dir_file
 from PIL import Image
 from io import BytesIO
 import re
@@ -30,7 +30,7 @@ class Test_Airdrop():
         pass
 
     def __init__(self):
-        self.filename = data_MEMEIdir_file(fileName="ETH_ad.txt")
+        self.filename = data_dir_file(dirPath='MEMEI',fileName="ETH_ad.txt")
         self.drexepath = "D:\\UserData\git\WebStorm\AirDrop\extend\chromedriver.exe"
         self.mmurl = "https://memei.io/?share=RH06q5S"
 
