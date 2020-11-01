@@ -24,16 +24,6 @@ def data_dir_file(data='data',dirPath=None,fileName=None):
     else:
         return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),data)
 
-def data_MEMEIdir_file(data='data',fileName=None):
-    '''查找上传文件的文件的路径'''
-    # print("data_dir_file fileName ",os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),data,'upload_files'))
-    print("fileName",fileName)
-    if fileName :
-        return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ), data,
-                             'MEMEI', fileName )
-    else:
-        return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),data ,'MEMEI')
-
 def dict_get(dict, objkey, default):
     # 获取字典中的objkey对应的值，适用于字典嵌套
     # dict:字典

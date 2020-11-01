@@ -8,6 +8,7 @@ import  time as t
 import random
 from selenium import webdriver
 from utils.public import data_dir_file
+from   utils.logger import Logger
 
 
 class Test_Airdrop():
@@ -23,6 +24,7 @@ class Test_Airdrop():
         self.filename = data_dir_file(dirPath='SIDC',fileName="ETH_ad.txt")
         self.drexepath = "D:\\UserData\git\WebStorm\AirDrop\extend\chromedriver.exe"
         self.mmurl = "http://www.sidc.pro"
+        self.log = Logger()
 
     def get_ETH_Address(self):
         lines=[]
@@ -51,14 +53,15 @@ class Test_Airdrop():
             #处理提交数据请求
             count = count+1
             dr.find_element_by_xpath("//*[@type='text']").clear()
-            t.sleep(random.randrange(1,3))#随机9-61秒之间
+            t.sleep(random.randrange(1,3))
             dr.find_element_by_xpath("//*[@type='text']").send_keys(address)
-            print(t.strftime(fmt,t.localtime(t.time()))+":NO is:"+str(count)+ ",current address->"+address+"  submit is start ....")
-            t.sleep(random.randrange(9,61))#随机9-61秒之间
+            # print(t.strftime(fmt,t.localtime(t.time()))+":NO is:"+str(count)+ ",current address->"+address+"  submit is start ....")
+            self.log.info(t.strftime(fmt,t.localtime(t.time()))+":NO is:"+str(count)+ ",current address->"+address+"  submit is start ....")
+            t.sleep(random.randrange(2,100))#随机9-61秒之间
             dr.find_element_by_xpath("//body/a[@id='airdrop']/div[1]/div[@class='container']/div[@class='row c-row1']/div[@class='col-md-2']/p[1]").click()
             dr.find_element_by_xpath("//*[@type='text']").send_keys(address)
-            print("current address->"+address+"_submit is end")
-        print("total:"+count+"  address tranf over !")
+            self.log.info("current address->"+address+"_submit is end")
+        self.log.info("total:"+count+"  address tranf over !")
         dr.close()
 
 if __name__ == '__main__':
