@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
-from utils.public import data_MEMEIdir_file
+from utils.public import data_dir_file
 from PIL import Image
 from io import BytesIO
 import re
@@ -30,9 +30,9 @@ class Test_Airdrop():
         pass
 
     def __init__(self):
-        self.filename = data_MEMEIdir_file(fileName="ETH_ad.txt")
+        self.filename = data_dir_file(dirPath='SIDC',fileName="ETH_ad.txt")
         self.drexepath = "D:\\UserData\git\WebStorm\AirDrop\extend\chromedriver.exe"
-        self.mmurl = "https://memei.io/?share=RH06q5S"
+        self.mmurl = "http://www.sidc.pro"
 
     def get_track(distance):
         track = []
@@ -66,7 +66,6 @@ class Test_Airdrop():
     def Participate_Airdrop(self):
         dr = webdriver.Chrome(self.drexepath)
         dr.get(self.mmurl)
-        print("111")
         dr.implicitly_wait(5)
         dr.maximize_window()
         t.sleep(random.randrange(3, 5, 1))
@@ -74,14 +73,15 @@ class Test_Airdrop():
         dr.execute_script(jsCode)
         eth_ads = Test_Airdrop.get_ETH_Address(self)
         for address in eth_ads:
+            print("address submit is start ....")
+            dr.find_element_by_xpath("//*[@type='text']").clear()
+            t.sleep(random.randrange(20,50))
             print("current ads is:"+address)
             dr.find_element_by_xpath("//*[@type='text']").send_keys(address)
-            dr.find_element_by_id("subeth").click()
-            t.sleep(1)
-            dr.quit()
-
-
-
+            print("button")
+            dr.find_element_by_xpath("//body/a[@id='airdrop']/div[1]/div[@class='container']/div[@class='row c-row1']/div[@class='col-md-2']/p[1]").click()
+            t.sleep(random.randrange(5, 9, 2))
+            print("address submit is end ....")
 
 if __name__ == '__main__':
     Test_Ad = Test_Airdrop()

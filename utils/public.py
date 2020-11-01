@@ -14,13 +14,23 @@ def data_dir(data='data', fileName=None):
     else:
         return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ), data)
 
-def data_MEMEIdir_file(data='data', fileName=None):
+def data_dir_file(data='data',dirPath=None,fileName=None):
+    '''查找上传文件的文件的路径'''
+    # print("data_dir_file fileName ",os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),data,'upload_files'))
+    print("fileName",fileName)
+    if fileName and dirPath :
+        return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ), data,
+                             dirPath, fileName )
+    else:
+        return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),data)
+
+def data_MEMEIdir_file(data='data',fileName=None):
     '''查找上传文件的文件的路径'''
     # print("data_dir_file fileName ",os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),data,'upload_files'))
     print("fileName",fileName)
     if fileName :
         return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ), data,
-                         'MEMEI', fileName )
+                             'MEMEI', fileName )
     else:
         return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),data ,'MEMEI')
 
