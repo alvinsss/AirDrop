@@ -23,13 +23,14 @@ import time, requests
 
 class Test_Airdrop():
     '''
-    进行MM业务
+    进行SIDC业务
     :return:
     '''
     def setUp(self):
         pass
 
     def __init__(self):
+        '''初始配置'''
         self.filename = data_dir_file(dirPath='SIDC',fileName="ETH_ad.txt")
         self.drexepath = "D:\\UserData\git\WebStorm\AirDrop\extend\chromedriver.exe"
         self.mmurl = "http://www.sidc.pro"
@@ -73,12 +74,12 @@ class Test_Airdrop():
         dr.execute_script(jsCode)
         eth_ads = Test_Airdrop.get_ETH_Address(self)
         for address in eth_ads:
+            #处理提交数据请求
             print("address submit is start ....")
             dr.find_element_by_xpath("//*[@type='text']").clear()
             t.sleep(random.randrange(20,50))
             print("current ads is:"+address)
             dr.find_element_by_xpath("//*[@type='text']").send_keys(address)
-            print("button")
             dr.find_element_by_xpath("//body/a[@id='airdrop']/div[1]/div[@class='container']/div[@class='row c-row1']/div[@class='col-md-2']/p[1]").click()
             t.sleep(random.randrange(5, 9, 2))
             print("address submit is end ....")
