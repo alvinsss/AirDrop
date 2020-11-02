@@ -24,6 +24,16 @@ def data_dir_file(data='data',dirPath=None,fileName=None):
     else:
         return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),data)
 
+def get_extend_chromedriver_file(dirPath='extend',fileName='chromedriver.exe'):
+    '''chromedriver文件的路径'''
+    if fileName and dirPath :
+        print(os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),
+                            dirPath, fileName ))
+        return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),
+                             dirPath, fileName )
+    else:
+        return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ))
+
 def dict_get(dict, objkey, default):
     # 获取字典中的objkey对应的值，适用于字典嵌套
     # dict:字典

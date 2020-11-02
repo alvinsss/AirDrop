@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2019/9/11 15:06
 # @Author  : alvin
-# @File    : test_cpa_main_flow.py
+# @File    : sidc.py
 # @Software: PyCharm
 # import  unittest
 import  time as t
 import random
 from selenium import webdriver
-from utils.public import data_dir_file
+from utils.public import data_dir_file,get_extend_chromedriver_file
 from   utils.logger import Logger
 
 
@@ -22,7 +22,7 @@ class Test_Airdrop():
     def __init__(self):
         '''初始配置'''
         self.filename = data_dir_file(dirPath='SIDC',fileName="ETH_ad.txt")
-        self.drexepath = "D:\\UserData\git\WebStorm\AirDrop\extend\chromedriver.exe"
+        self.drexepath = get_extend_chromedriver_file()
         self.url = "http://www.sidc.pro"
         self.log = Logger()
 
