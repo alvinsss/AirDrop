@@ -8,7 +8,6 @@ import os
 
 def data_dir(data='data', fileName=None):
     '''查找文件的路径'''
-    print("data_dir fileName ",fileName)
     if fileName :
         return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ), data,fileName )
     else:
@@ -27,8 +26,8 @@ def data_dir_file(data='data',dirPath=None,fileName=None):
 def get_extend_chromedriver_file(dirPath='extend',fileName='chromedriver.exe'):
     '''chromedriver文件的路径'''
     if fileName and dirPath :
-        print(os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),
-                            dirPath, fileName ))
+        # print(os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),
+        #                     dirPath, fileName ))
         return os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),
                              dirPath, fileName )
     else:
