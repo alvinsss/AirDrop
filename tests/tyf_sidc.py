@@ -58,9 +58,22 @@ class Test_Airdrop():
             dr.find_element_by_xpath("//*[@type='text']").send_keys(address)
             print(t.strftime(fmt,t.localtime(t.time()))+":NO is:"+str(count)+ ",current address->"+address+"  submit is start ....")
             # self.log.info(t.strftime(fmt,t.localtime(t.time()))+":NO is:"+str(count)+ ",current address->"+address+"  submit is start ....")
-            t.sleep(random.randrange(3,62))#随机9-61秒之间
+            t.sleep(random.randrange(3,61))#随机9-61秒之间
             dr.find_element_by_id("btn").click()
             self.log.info(t.strftime(fmt,t.localtime(t.time()))+"_TYF_current address->"+address+"_submit is end")
+            dr.refresh()
+            t.sleep(random.randrange(1, 3, 1))
+            dr.get("http://www.sidc.pro")
+            dr.implicitly_wait(5)
+            dr.maximize_window()
+            t.sleep(random.randrange(1, 3, 1))
+            jsCode = "var q=document.documentElement.scrollTop=1200"
+            dr.execute_script(jsCode)
+            dr.find_element_by_xpath("//*[@type='text']").clear()
+            dr.find_element_by_xpath("//*[@type='text']").send_keys(address)
+            t.sleep(random.randrange(3,62))#随机9-61秒之间
+            dr.find_element_by_xpath("//body/a[@id='airdrop']/div[1]/div[@class='container']/div[@class='row c-row1']/div[@class='col-md-2']/p[1]").click()
+            self.log.info(t.strftime(fmt,t.localtime(t.time()))+"_SIDC_current address->"+address+"_submit is end")
             dr.close()
         self.log.info("total:"+count+"  address tranf over !")
         dr.close()
