@@ -1,0 +1,57 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2019/9/11 15:06
+# @Author  : alvin
+# @File    : sidc.py
+# @Software: PyCharm
+# import  unittest
+
+import time as t
+import random
+import requests
+import json
+import datetime
+from utils.logger import Logger
+from utils.public import data_dir_file
+from utils.operationExcel_writedata import Data_Excel_Action
+
+
+class Test_Mainbi():
+    '''
+    进行mainbi
+    :return:
+    '''
+
+    def setUp(self):
+        pass
+
+    def __init__(self):
+        '''初始配置'''
+        self.log = Logger()
+        self.filename = data_dir_file( dirPath='MainBi',
+                                       fileName="ManinBi_demo.xlsx" )
+        self.excel = Data_Excel_Action()
+
+    def write_mainbi_data(self):
+        '''接口数据'''
+        res = requests.get(
+            "https://dncapi.bqrank.net/api/coin/web-coinrank?page=1&type=-1&pagesize=100&webp=1" )
+        if 200 == res.json()['code']:
+            if res.json()['msg'] == "success":
+                data = []
+                for i in range(int( res.json()['maxpage'])):
+                    list_data = []
+                    list_data.append( (datetime.datetime.now() ).strftime("%Y/%m/%d" ) )
+                    list_data.append( res.json()['data'][i]['rank'])
+                    list_data.append( res.json()['data'][i]['fullname'])
+                    list_data.append( res.json()['data'][i]['name'])
+                    list_data.append( res.json()['data'][i]['current_price'])
+                    list_data.append( res.json()['data'][i]['vol'])
+                    list_data.append( res.json()['data'][i]['market_value'])
+                    list_data.append( res.json()['data'][i]['turnoverrate'])
+                    data.append( list_data )
+                file_name = self.excel.write_alldata( data )
+
+
+if __name__ == '__main__':
+    Test = Test_Mainbi()
+    Test.write_mainbi_data()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2019/9/18 14:41
 # @Author  : alvin
-# @File    : operationExcel_cpa_dsp_dataimp.py
+# @File    : Data_Excel_Action.py
 # @Software: PyCharm
 
 import os
@@ -15,7 +15,7 @@ from openpyxl import Workbook
 from openpyxl import load_workbook
 
 
-class CPA_Dsp_DataImp( object ):
+class Data_Excel_Action( object ):
 
     def getExcel(self,fileName):
         print("getExcel  data_dir_file",data_dir_file( fileName=fileName ))
@@ -94,18 +94,18 @@ class CPA_Dsp_DataImp( object ):
         ws = old_content.get_sheet( 0 )
         ws.write( row, col, content )
 
-    def write_alldata(self,content):
+    def write_alldata(self,content,):
         # 获取文件路径
-        dataPath = os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),'data' ,'upload_files')
+        dataPath = os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),'data' ,'MainBi')
         # 定义文件名称
         #  invalid mode ('wb') or filename: 'Excel2017-09-21_20:15:57.xlsx'   这种方式明明文件，会提示保存失败，无效的文件名。
         # nameTime = time.strftime('%Y-%m-%d_%H:%M:%S')
         nameTime = time.strftime( '%Y-%m-%d_%H-%M-%S' )
-        excelName = 'export_cpa_demo' + nameTime + '.xlsx'
+        excelName = 'main_demo' + nameTime + '.xlsx'
         dataPath_file = os.path.join( dataPath, excelName )
         wb = Workbook()
         ws = wb.active
-        tableTitle = ['消费日期', '广告类型', '广告名称', '广告包名','渠道号','激活数','激活数据说明']
+        tableTitle = ['日期','排名', '全名', '币种', '市值','换手率','币价','交易额']
         # 维护表头
         #        if row < 1 or column < 1:
         #          raise ValueError("Row or column values must be at least 1")
@@ -116,13 +116,12 @@ class CPA_Dsp_DataImp( object ):
         # print( ws['B3'].number_format )  # General
         #写表头
         for col in range( len( tableTitle ) ):
-            print("len( tableTitle )",len( tableTitle ))
+            # print("len( tableTitle )",len( tableTitle ))
             c = col + 1
-            print("c",c)
             ws.cell( row=1, column=c ).value = tableTitle[col]
 
         for row in range( len( content ) ):
-            print("len( content )",len( content ))
+            # print("len( content )",len( content ))
             ws.append( content[row] )
 
         wb.save( filename=dataPath_file )
@@ -188,5 +187,5 @@ class CPA_Dsp_DataImp( object ):
         print("set_data_dateformat is ok!")
 
 if __name__ == "__main__":
-    a = CPA_Dsp_DataImp()
+    a = Data_Excel_Action()
     a.getExcel(r"D:\UserData\git\baice\qingniu\data\upload_files\export_cpa_demo2019-09-19_10-04-54.xlsx")
