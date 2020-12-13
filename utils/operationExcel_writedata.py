@@ -94,7 +94,13 @@ class Data_Excel_Action( object ):
         ws = old_content.get_sheet( 0 )
         ws.write( row, col, content )
 
-    def write_alldata(self,content,):
+    def awrite_ethhistorydata(self,content):
+        dataPath = os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),'data' ,'MainBi')
+        dataPath_file = os.path.join( dataPath, "ethexchange.txt" )
+        with open(dataPath_file,"a") as file:
+            file.write(str(content)+'\n')
+
+    def write_alldata(self,content):
         # 获取文件路径
         dataPath = os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),'data' ,'MainBi')
         # 定义文件名称
