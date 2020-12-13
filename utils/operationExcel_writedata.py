@@ -105,7 +105,7 @@ class Data_Excel_Action( object ):
         dataPath_file = os.path.join( dataPath, excelName )
         wb = Workbook()
         ws = wb.active
-        tableTitle = ['日期','排名', '全名', '币种', '市值','换手率','币价','交易额']
+        tableTitle = ['日期','排名', '全名', '币种', '市值','币价','换手率','BTC兑换个数']
         # 维护表头
         #        if row < 1 or column < 1:
         #          raise ValueError("Row or column values must be at least 1")

@@ -44,11 +44,15 @@ class Test_Mainbi():
                     list_data.append( res.json()['data'][i]['rank'])
                     list_data.append( res.json()['data'][i]['fullname'])
                     list_data.append( res.json()['data'][i]['name'])
-                    list_data.append( res.json()['data'][i]['current_price'])
-                    list_data.append( res.json()['data'][i]['vol'])
                     list_data.append( res.json()['data'][i]['market_value'])
+                    list_data.append( res.json()['data'][i]['current_price'])
                     list_data.append( res.json()['data'][i]['turnoverrate'])
+                    if 0==i:
+                        list_data.append( (res.json()['data'][i]['current_price'])/(res.json()['data'][i]['current_price']) )
+                    else:
+                        list_data.append( (res.json()['data'][0]['current_price'])/(res.json()['data'][i]['current_price']) )
                     data.append( list_data )
+                    # print(data)
                 file_name = self.excel.write_alldata( data )
 
 
