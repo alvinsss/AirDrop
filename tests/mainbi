@@ -33,34 +33,68 @@ class Test_Mainbi():
 
     def write_mainbi_data(self):
         '''接口数据'''
+        fileName="mainbi"
+        tableTitle = ['日期','排名', '全名', '币种', '市值','币价RMB','币价USDT','换手率','BTC兑换个数']
         res = requests.get(
             "https://dncapi.bqrank.net/api/coin/web-coinrank?page=1&type=-1&pagesize=100&webp=1" )
-
         if 200 == res.json()['code']:
             if res.json()['msg'] == "success":
                 data = []
-                for i in range(int( res.json()['maxpage'])):
+                for i in range( int( res.json()['maxpage'] ) ):
                     list_data = []
-                    list_data.append( (datetime.datetime.now() ).strftime("%Y-%m-%d %H:%M:%S" ) )
-                    list_data.append( res.json()['data'][i]['rank'])
-                    list_data.append( res.json()['data'][i]['fullname'])
-                    list_data.append( res.json()['data'][i]['name'])
-                    list_data.append( res.json()['data'][i]['market_value'])
-                    list_data.append( res.json()['data'][i]['current_price'])
-                    list_data.append( res.json()['data'][i]['turnoverrate'])
+                    list_data.append( (datetime.datetime.now()).strftime(
+                        "%Y-%m-%d %H:%M:%S" ) )
+                    list_data.append( res.json()['data'][i]['rank'] )
+                    list_data.append( res.json()['data'][i]['fullname'] )
+                    list_data.append( res.json()['data'][i]['name'] )
+                    list_data.append( res.json()['data'][i]['market_value'] )
+                    list_data.append( res.json()['data'][i]['current_price'] )
+                    list_data.append(
+                        res.json()['data'][i]['current_price_usd'] )
+                    list_data.append( res.json()['data'][i]['turnoverrate'] )
                     '''非btc数据兑换处理'''
-                    if 0==i:
-                        list_data.append( (res.json()['data'][i]['current_price'])/(res.json()['data'][i]['current_price']) )
+                    if 0 == i:
+                        list_data.append(
+                            (res.json()['data'][i]['current_price']) / (
+                            res.json()['data'][i]['current_price']) )
                     else:
-                        list_data.append( format((res.json()['data'][0]['current_price'])/(res.json()['data'][i]['current_price']),'.3f') )
+                        list_data.append( format(
+                            (res.json()['data'][0]['current_price']) / (
+                            res.json()['data'][i]['current_price']), '.3f' ) )
                     data.append( list_data )
                     '''btc可兑换eth单独写文件方便后续展示'''
                     if res.json()['data'][i]['name'] == 'ETH':
-                        self.excel.awrite_ethhistorydata(data[1])
+                        self.excel.awrite_ethhistorydata( data[0] )
+                        self.excel.awrite_ethhistorydata( data[1] )
                     # print(data)
-                file_name = self.excel.write_alldata( data )
+                self.excel.write_data(fileName,data,tableTitle )
+
+    def vix_data(self,safetyV):
+        '''接口数据 http://wx.heyuedi.com/alarm/fng/h5'''
+        tableTitle = ['日期', '币价USDT', '恐慌贪婪值']
+        fileName = "vix"
+        res = requests.get(
+            "http://wx.heyuedi.com/alarm/fng/getFng" )
+        if 0 == res.json()['code']:
+            if res.json()['msg'] == "成功":
+                data = []
+                count = 0
+                lens=len( res.json()['data'] )
+                for i in range( lens ):
+                    list_data = []
+                    list_data.append( res.json()['data'][i]['date'] )
+                    list_data.append( res.json()['data'][i]['btc_price'] )
+                    list_data.append( res.json()['data'][i]['value'] )
+                    data.append( list_data )
+                    if (int( res.json()['data'][i]['value'] ) >= safetyV):
+                        count = count +1
+                self.excel.write_data(fileName,data,tableTitle )
+                if count > 0:
+                    data[lens-1].append(count)
+                    self.excel.awrite_ethhistorydata( data[lens-1] )
 
 
 if __name__ == '__main__':
     Test = Test_Mainbi()
     Test.write_mainbi_data()
+    Test.vix_data(93)

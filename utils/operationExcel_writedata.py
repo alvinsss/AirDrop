@@ -96,7 +96,7 @@ class Data_Excel_Action( object ):
 
     def awrite_ethhistorydata(self,content):
         dataPath = os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),'data' ,'MainBi')
-        dataPath_file = os.path.join( dataPath, "ethexchange.txt" )
+        dataPath_file = os.path.join( dataPath, "mainbi_ethexchange.txt" )
         with open(dataPath_file,"a") as file:
             file.write(str(content)+'\n')
 
@@ -107,11 +107,11 @@ class Data_Excel_Action( object ):
         #  invalid mode ('wb') or filename: 'Excel2017-09-21_20:15:57.xlsx'   这种方式明明文件，会提示保存失败，无效的文件名。
         # nameTime = time.strftime('%Y-%m-%d_%H:%M:%S')
         nameTime = time.strftime( '%Y-%m-%d_%H-%M-%S' )
-        excelName = 'main_demo' + nameTime + '.xlsx'
+        excelName = 'main_BI_list' + nameTime + '.xlsx'
         dataPath_file = os.path.join( dataPath, excelName )
         wb = Workbook()
         ws = wb.active
-        tableTitle = ['日期','排名', '全名', '币种', '市值','币价','换手率','BTC兑换个数']
+        tableTitle = ['日期','排名', '全名', '币种', '市值','币价RMB','币价USDT','换手率','BTC兑换个数']
         # 维护表头
         #        if row < 1 or column < 1:
         #          raise ValueError("Row or column values must be at least 1")
@@ -130,6 +130,25 @@ class Data_Excel_Action( object ):
             # print("len( content )",len( content ))
             ws.append( content[row] )
 
+        wb.save( filename=dataPath_file )
+        wb.close()
+        return dataPath_file
+
+    def write_data(self,fileName,content,tableTitle):
+        dataPath = os.path.join( os.path.dirname( os.path.dirname( __file__ ) ),'data' ,'MainBi')
+        nameTime = time.strftime( '%Y-%m-%d_%H-%M-%S' )
+        excelName = fileName + nameTime + '.xlsx'
+        dataPath_file = os.path.join( dataPath, excelName )
+        wb = Workbook()
+        ws = wb.active
+        # tableTitle = ['日期','排名', '全名', '币种', '市值','币价RMB','币价USDT','换手率','BTC兑换个数']
+        for col in range( len( tableTitle ) ):
+            # print("len( tableTitle )",len( tableTitle ))
+            c = col + 1
+            ws.cell( row=1, column=c ).value = tableTitle[col]
+        for row in range( len( content ) ):
+            # print("len( content )",len( content ))
+            ws.append( content[row] )
         wb.save( filename=dataPath_file )
         wb.close()
         return dataPath_file
