@@ -5,27 +5,9 @@
 # @Software: PyCharm
 
 # coding: utf-8
-import configparser
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-from email.mime.audio import MIMEAudio
-from email.mime.application import MIMEApplication
-import mimetypes
-import os
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-from email.mime.audio import MIMEAudio
-from email.mime.application import MIMEApplication
-import mimetypes
-import os
 import smtplib
 from email.mime.text import MIMEText
 from utils.operationConfig import OperationConfig
-
 
 class MyMail:
 
@@ -71,4 +53,4 @@ class MyMail:
 
 if __name__ == '__main__':
     mymail = MyMail()
-    mymail.send_mail("")
+    mymail.send_mail("qatest")
