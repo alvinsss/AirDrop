@@ -13,7 +13,7 @@ import datetime
 from utils.logger import Logger
 from utils.public import data_dir_file
 from utils.operationExcel_writedata import Data_Excel_Action
-
+from utils.operationemail import MyMail
 
 class Test_Mainbi():
     '''
@@ -30,6 +30,8 @@ class Test_Mainbi():
         self.filename = data_dir_file( dirPath='MainBi',
                                        fileName="ManinBi_demo.xlsx" )
         self.excel = Data_Excel_Action()
+        self.mailaction= MyMail()
+
 
     def write_mainbi_data(self):
         '''接口数据'''
@@ -52,15 +54,24 @@ class Test_Mainbi():
                     list_data.append(
                         res.json()['data'][i]['current_price_usd'] )
                     list_data.append( res.json()['data'][i]['turnoverrate'] )
-                    '''非btc数据兑换处理'''
+
                     if 0 == i:
                         list_data.append(
                             (res.json()['data'][i]['current_price']) / (
                             res.json()['data'][i]['current_price']) )
                     else:
-                        list_data.append( format(
-                            (res.json()['data'][0]['current_price']) / (
-                            res.json()['data'][i]['current_price']), '.3f' ) )
+                        '''非btc数据兑换处理'''
+                        f_number=format((res.json()['data'][0]['current_price']) / (res.json()['data'][i]['current_price']),'.3f' )
+                        list_data.append( f_number )
+                        if res.json()['data'][i]['name'] == 'ETH':
+                            msg="1 btc exchange->" +f_number+  "  eth"
+                            '''大于33个发邮件'''
+                            if float(f_number) >= 33:
+                                # self.log.error("1 btc exchange->" +f_number+  "  eth" )
+                                self.mailaction.send_mail(msg)
+                            else:
+                                self.log.info("1 btc exchange->" +f_number+ "   eth" )
+                                # self.mailaction.send_mail(msg)
                     data.append( list_data )
                     '''btc可兑换eth单独写文件方便后续展示'''
                     if res.json()['data'][i]['name'] == 'ETH':
@@ -92,7 +103,6 @@ class Test_Mainbi():
                 if count > 0:
                     data[lens-1].append(count)
                     self.excel.awrite_ethhistorydata( data[lens-1] )
-
 
 if __name__ == '__main__':
     Test = Test_Mainbi()

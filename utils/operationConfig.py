@@ -19,13 +19,18 @@ class OperationConfig(object):
         tmpdict={}
         config = configparser.ConfigParser()
         config.read(self.testdata.data_dir('config','config.ini'),encoding="utf-8-sig")
-        # print(config)
         send_user=config.get(contents,'SEND_USER')
-        send_mail_smtp=config.get(contents,'SEND_MAIL_SMTP')
-        send_user_passwd=config.get(contents,'SEND_USER_PASSWD')
-        tmpdict['user']=send_user
-        tmpdict['smtp']=send_mail_smtp
-        tmpdict['passwd']=send_user_passwd
+        login_pwd=config.get(contents,'SEND_USER_PASSWD')
+        from_addr=config.get(contents,'FROM_ADDRS')
+        to_addrs=config.get(contents,'TO_ADDRS')
+        host=config.get(contents,'HOST')
+        port=config.get(contents,'PORT')
+        tmpdict['login_user']=send_user
+        tmpdict['login_pwd']=login_pwd
+        tmpdict['from_addr']=from_addr
+        tmpdict['to_addrs']=to_addrs
+        tmpdict['host']=host
+        tmpdict['port']=port
         return tmpdict
 
     def get_testenv_info (self,contents="env-test-api"):
@@ -87,7 +92,7 @@ class OperationConfig(object):
 
 if __name__ == "__main__":
 	a = OperationConfig()
-	print(a.get_testenv_info())
-	# print(a.getMailsendinfo())
+	print(type(a.get_sendmail_info()))
+    # print(type(a.get_sendmail_info()))
 
 
