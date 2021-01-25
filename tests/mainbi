@@ -51,34 +51,50 @@ class Test_Mainbi():
                     list_data.append( res.json()['data'][i]['name'] )
                     list_data.append( res.json()['data'][i]['market_value'] )
                     list_data.append( res.json()['data'][i]['current_price'] )
-                    list_data.append(
-                        res.json()['data'][i]['current_price_usd'] )
+                    list_data.append(res.json()['data'][i]['current_price_usd'] )
                     list_data.append( res.json()['data'][i]['turnoverrate'] )
-
+                    # 增加兑换数量
                     if 0 == i:
                         list_data.append(
-                            (res.json()['data'][i]['current_price']) / (
-                            res.json()['data'][i]['current_price']) )
+                            (res.json()['data'][i]['current_price']) / (res.json()['data'][i]['current_price']) )
                     else:
                         '''非btc数据兑换处理'''
                         f_number=format((res.json()['data'][0]['current_price']) / (res.json()['data'][i]['current_price']),'.3f' )
                         list_data.append( f_number )
+                        '''针对个币数据处理发邮件'''
                         if res.json()['data'][i]['name'] == 'ETH':
-                            msg="1 btc exchange->" +f_number+  "  eth"
-                            '''大于33个发邮件'''
-                            if float(f_number) >= 33:
-                                # self.log.error("1 btc exchange->" +f_number+  "  eth" )
-                                self.mailaction.send_mail(msg)
+                            msg="1 btc exchange->" +f_number+  "  ETH"
+                            '''小于10个发邮件，注意牛市尾期 根据历史牛市数据'''
+                            if float(f_number) <= 10:
+                                self.mailaction.send_mail(msg,'BTC exchange ETH mail info ')
                             else:
                                 self.log.info("1 btc exchange->" +f_number+ "   eth" )
-                                # self.mailaction.send_mail(msg)
+
+                        if res.json()['data'][i]['name'] == 'BCH':
+                            msg="1 btc exchange->" +f_number+  "  BCH"
+                            if float(f_number) >= 83.3:
+                                self.mailaction.send_mail(msg,'BTC exchange BCH mail info ')
+                            else:
+                                self.log.info("1 btc exchange->" +f_number+ "   BCH" )
+                        if res.json()['data'][i]['name'] == 'LTC':
+                            msg="1 btc exchange->" +f_number+  "  LTC"
+                            if float(f_number) >= 250:
+                                self.mailaction.send_mail(msg,'BTC exchange LTC mail info ')
+                            else:
+                                self.log.info("1 btc exchange->" +f_number+ "   LTC" )
                     data.append( list_data )
                     '''btc可兑换eth单独写文件方便后续展示'''
-                    if res.json()['data'][i]['name'] == 'ETH':
+                    # print(data)
+                    if res.json()['data'][i]['name'] == 'ETC':
                         self.excel.awrite_ethhistorydata( data[0] )
                         self.excel.awrite_ethhistorydata( data[1] )
-                    # print(data)
+                        self.excel.awrite_ethhistorydata( data[3] )
+                        self.excel.awrite_ethhistorydata( data[7] )
+                        self.excel.awrite_ethhistorydata( data[8] )
+                        self.excel.awrite_ethhistorydata( data[11] )
                 self.excel.write_data(fileName,data,tableTitle )
+            else:
+                print("request mainbi is failed!")
 
     def vix_data(self,safetyV):
         '''接口数据 http://wx.heyuedi.com/alarm/fng/h5'''
@@ -103,8 +119,10 @@ class Test_Mainbi():
                 if count > 0:
                     data[lens-1].append(count)
                     self.excel.awrite_ethhistorydata( data[lens-1] )
+        else:
+            print("request vix is failed!")
 
 if __name__ == '__main__':
     Test = Test_Mainbi()
     Test.write_mainbi_data()
-    Test.vix_data(93)
+    Test.vix_data(90)

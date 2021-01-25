@@ -23,18 +23,19 @@ class MyMail:
         self.port = confdata['port']
 
 
-    def send_mail(self,msginfo):
+    def send_mail(self,msginfo,subject):
 
         # 设置email信息
         # 邮件内容设置
         message = MIMEText( msginfo , 'plain', 'utf-8' )
         # 邮件主题
-        message['Subject'] = 'btc exchange eth mail info'
+        # message['Subject'] = 'btc exchange eth mail info'
+        message['Subject'] = subject
         # 发送方信息
         message['From'] = self.from_addr
         # 接受方信息
         message['To'] = self.to_addrs
-
+        # print(message)
         # 登录并发送邮件
         try:
             smtpObj = smtplib.SMTP()
@@ -44,7 +45,7 @@ class MyMail:
             smtpObj.login( self.login_user, self.login_pwd )
             # 发送
             smtpObj.sendmail(
-                self.from_addr, self.to_addrs, message.as_string() )
+                self.from_addr, self.to_addrs.split(','), message.as_string() )
             # 退出
             smtpObj.quit()
             print( 'send mail is success' )
@@ -53,4 +54,4 @@ class MyMail:
 
 if __name__ == '__main__':
     mymail = MyMail()
-    mymail.send_mail("qatest")
+    mymail.send_mail("qatest all1",'btc exchange eth mail info test')
