@@ -51,7 +51,7 @@ class Test_Mainbi():
                     list_data.append( res.json()['data'][i]['name'] )
                     list_data.append( res.json()['data'][i]['market_value'] )
                     list_data.append( res.json()['data'][i]['current_price'] )
-                    list_data.append(res.json()['data'][i]['current_price_usd'] )
+                    list_data.append( res.json()['data'][i]['current_price_usd'] )
                     list_data.append( res.json()['data'][i]['turnoverrate'] )
                     # 增加兑换数量
                     if 0 == i:
@@ -96,8 +96,10 @@ class Test_Mainbi():
             else:
                 print("request mainbi is failed!")
 
-    def vix_data(self,safetyV):
-        '''接口数据 http://wx.heyuedi.com/alarm/fng/h5'''
+    def vix_data(self,createV,reduceV,safetyV):
+        '''接口数据 http://wx.heyuedi.com/alarm/fng/h5
+          连续低于66可以建仓，55-90之间持币待涨，连续大于90
+          注意回调风险   数据分析整体 仅供参考！'''
         tableTitle = ['日期', '币价USDT', '恐慌贪婪值']
         fileName = "vix"
         res = requests.get(
@@ -113,6 +115,10 @@ class Test_Mainbi():
                     list_data.append( res.json()['data'][i]['btc_price'] )
                     list_data.append( res.json()['data'][i]['value'] )
                     data.append( list_data )
+                    if (int( res.json()['data'][lens-1]['value'] ) <= createV):
+                        print("create one's position size")
+                    if (int( res.json()['data'][lens-1]['value'] ) >= reduceV):
+                        print("reduce one's position size")
                     if (int( res.json()['data'][i]['value'] ) >= safetyV):
                         count = count +1
                 self.excel.write_data(fileName,data,tableTitle )
@@ -125,4 +131,4 @@ class Test_Mainbi():
 if __name__ == '__main__':
     Test = Test_Mainbi()
     Test.write_mainbi_data()
-    Test.vix_data(90)
+    Test.vix_data(55,90,90)
