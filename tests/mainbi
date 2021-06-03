@@ -98,7 +98,7 @@ class Test_Mainbi():
 
     def vix_data(self,createV,reduceV,safetyV):
         '''接口数据 http://wx.heyuedi.com/alarm/fng/h5
-          连续低于66可以建仓，55-90之间持币待涨，连续大于90
+          连续低于66可以建仓，70-90之间持币待涨，连续大于90
           注意回调风险   数据分析整体 仅供参考！'''
         tableTitle = ['日期', '币价USDT', '恐慌贪婪值']
         fileName = "vix"
@@ -128,7 +128,33 @@ class Test_Mainbi():
         else:
             print("request vix is failed!")
 
+    def tran_histydata(self):
+
+        tableTitle = ['日期', '开盘价', '收盘价', '最高价', '最低价']
+        fileName = "cspr"
+        res = requests.get(
+            "https://dncapi.bqrank.net/api/v3/coin/history?coincode=casper&begintime=20210411&endtime=20210511&page=1&per_page=1000&webp=1" )
+        if 200 == res.json()['code']:
+            if res.json()['msg'] == "success":
+                # print(res.json())
+                data = []
+                count = 0
+                lens=len( res.json()['data']['list'] )
+                print(lens)
+                for i in range( lens ):
+                    list_data = []
+                    list_data.append( res.json()['data']['list'][i]['tickertime'] )
+                    list_data.append( res.json()['data']['list'][i]['openprice'] )
+                    list_data.append( res.json()['data']['list'][i]['closeprice'] )
+                    list_data.append( res.json()['data']['list'][i]['high'] )
+                    list_data.append( res.json()['data']['list'][i]['low'] )
+                    data.append( list_data )
+                print(data)
+                self.excel.write_data(fileName,data,tableTitle )
+        else:
+            print("request vix is failed!")
+
 if __name__ == '__main__':
     Test = Test_Mainbi()
-    Test.write_mainbi_data()
-    Test.vix_data(55,90,90)
+    # Test.tran_histydata()
+    Test.vix_data(50,90,90)
